@@ -25,6 +25,7 @@ export default function Row({ isLargeRow, title, id, fetchUrl }) {
 
   const fetchMovieData = async () => {
     const request = await axios.get(fetchUrl);
+    console.log("request", request);
     setMovies(request.data.results);
   };
 
@@ -36,13 +37,10 @@ export default function Row({ isLargeRow, title, id, fetchUrl }) {
   return (
     <section className="row">
       <h2>{title}</h2>
-
       <Swiper
-        spaceBetween={15}
+        // install Swiper modules
         modules={[Navigation, Pagination, Scrollbar, A11y]}
-        navigation
-        pagination={{ clickable: true }}
-        loop={true}
+        loop={true} // loop 기능을 사용할 것인지
         breakpoints={{
           1378: {
             slidesPerView: 6, // 한번에 보이는 슬라이드 개수
@@ -61,12 +59,15 @@ export default function Row({ isLargeRow, title, id, fetchUrl }) {
             slidesPerGroup: 3,
           },
         }}
+        navigation // arrow 버튼 사용 유무
+        pagination={{ clickable: true }} // 페이지 버튼 보이게 할지
       >
         <div id={id} className="row__posters">
           {movies.map((movie) => (
             <SwiperSlide>
               <img
                 key={movie.id}
+                style={{ padding: "25px 0" }}
                 className={`row__poster ${isLargeRow && "row__posterLarge"}`}
                 src={`https://image.tmdb.org/t/p/original/${
                   isLargeRow ? movie.poster_path : movie.backdrop_path
@@ -78,6 +79,7 @@ export default function Row({ isLargeRow, title, id, fetchUrl }) {
           ))}
         </div>
       </Swiper>
+
       {modalOpen && (
         <MovieModal {...movieSelected} setModalOpen={setModalOpen} />
       )}
@@ -85,49 +87,48 @@ export default function Row({ isLargeRow, title, id, fetchUrl }) {
   );
 }
 
-/*
-return (
-    <section className="row">
-      <h2>{title}</h2>
-      <div className="slider">
-        <div className="slider__arrow-left">
-          <span
-            className="arrow"
-            onClick={() => {
-              document.getElementById(id).scrollLeft -= window.innerWidth - 80;
-            }}
-          >
-            {"<"}
-          </span>
-        </div>
-        <div id={id} className="row__posters">
-          {movies.map((movie) => (
-            <img
-              key={movie.id}
-              className={`row__poster ${isLargeRow && "row__posterLarge"}`}
-              src={`https://image.tmdb.org/t/p/original/${
-                isLargeRow ? movie.poster_path : movie.backdrop_path
-              } `}
-              alt={movie.name}
-              onClick={() => handleClick(movie)}
-            />
-          ))}
-        </div>
-        <div className="slider__arrow-right">
-          <span
-            className="arrow"
-            onClick={() => {
-              document.getElementById(id).scrollLeft += window.innerWidth - 80;
-            }}
-          >
-            {">"}
-          </span>
-        </div>
-      </div>
+// eslint-disable-next-line no-lone-blocks
+{
+  /* <section className="row">
+<h2>{title}</h2>
+<div className="slider">
+  <div className="slider__arrow-left">
+    <span
+      className="arrow"
+      onClick={() => {
+        document.getElementById(id).scrollLeft -= window.innerWidth - 80;
+      }}
+    >
+      {"<"}
+    </span>
+  </div>
+  <div id={id} className="row__posters">
+    {movies.map((movie) => (
+      <img
+        key={movie.id}
+        className={`row__poster ${isLargeRow && "row__posterLarge"}`}
+        src={`https://image.tmdb.org/t/p/original/${
+          isLargeRow ? movie.poster_path : movie.backdrop_path
+        } `}
+        alt={movie.name}
+        onClick={() => handleClick(movie)}
+      />
+    ))}
+  </div>
+  <div className="slider__arrow-right">
+    <span
+      className="arrow"
+      onClick={() => {
+        document.getElementById(id).scrollLeft += window.innerWidth - 80;
+      }}
+    >
+      {">"}
+    </span>
+  </div>
+</div>
 
-      {modalOpen && (
-        <MovieModal {...movieSelected} setModalOpen={setModalOpen} />
-      )}
-    </section>
-  );
-*/
+{modalOpen && (
+  <MovieModal {...movieSelected} setModalOpen={setModalOpen} />
+)}
+</section> */
+}
